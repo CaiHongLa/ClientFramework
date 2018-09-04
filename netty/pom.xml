@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>clientcomponents</artifactId>
+        <groupId>cn.cloudwalk.smartframework.clientcomponents</groupId>
+        <version>1.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>netty</artifactId>
+
+    <name>netty</name>
+
+    <properties>
+        <core.version>1.0.0</core.version>
+        <smartframework.version>2.0.10</smartframework.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>cn.cloudwalk.smartframework</groupId>
+            <artifactId>smart-transport</artifactId>
+            <version>${smartframework.version}</version>
+        </dependency>
+    </dependencies>
+
+    <dependencies>
+        <dependency>
+            <groupId>cn.cloudwalk.smartframework.clientcomponents</groupId>
+            <artifactId>core</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

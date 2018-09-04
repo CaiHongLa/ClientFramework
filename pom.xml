@@ -10,7 +10,7 @@
     <version>1.0.0</version>
     <modules>
         <module>core</module>
-        <module>client</module>
+        <module>netty</module>
     </modules>
 
     <name>clientcomponents</name>
