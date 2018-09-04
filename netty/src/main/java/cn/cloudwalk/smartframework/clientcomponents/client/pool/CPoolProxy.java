@@ -2,9 +2,9 @@ package cn.cloudwalk.smartframework.clientcomponents.client.pool;
 
 
 import cn.cloudwalk.smartframework.clientcomponents.core.ClientConnection;
+import cn.cloudwalk.smartframework.clientcomponents.core.ManagedClient;
 import cn.cloudwalk.smartframework.clientcomponents.core.ManagedClientConnection;
 import cn.cloudwalk.smartframework.clientcomponents.core.exception.ConnectionShutdownException;
-import cn.cloudwalk.smartframework.transport.Client;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -88,12 +88,12 @@ public class CPoolProxy implements ManagedClientConnection {
     }
 
     @Override
-    public void bind(final Client client) throws IOException {
+    public void bind(final ManagedClient client) throws IOException {
         getValidConnection().bind(client);
     }
 
     @Override
-    public Client getClient() {
+    public ManagedClient getClient() {
         return getValidConnection().getClient();
     }
 

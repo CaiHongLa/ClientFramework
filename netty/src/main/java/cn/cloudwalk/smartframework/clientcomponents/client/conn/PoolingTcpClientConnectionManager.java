@@ -1,5 +1,6 @@
 package cn.cloudwalk.smartframework.clientcomponents.client.conn;
 
+import cn.cloudwalk.smartframework.clientcomponents.core.ManagedClientConnection;
 import cn.cloudwalk.smartframework.clientcomponents.client.pool.CPool;
 import cn.cloudwalk.smartframework.clientcomponents.client.pool.CPoolEntry;
 import cn.cloudwalk.smartframework.clientcomponents.client.pool.CPoolProxy;

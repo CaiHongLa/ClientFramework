@@ -1,15 +1,14 @@
 package cn.cloudwalk.smartframework.clientcomponents.client.conn;
 
+import cn.cloudwalk.smartframework.clientcomponents.core.ManagedClient;
 import cn.cloudwalk.smartframework.clientcomponents.core.ManagedClientConnection;
-import cn.cloudwalk.smartframework.transport.Client;
-import cn.cloudwalk.smartframework.transport.support.transport.TransportException;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
 public class DefaultSocketConnection implements ManagedClientConnection {
 
-    private Client client;
+    private ManagedClient client;
     private final String id;
 
     public DefaultSocketConnection(String id) {
@@ -22,22 +21,18 @@ public class DefaultSocketConnection implements ManagedClientConnection {
     }
 
     @Override
-    public void bind(Client client) throws IOException {
+    public void bind(ManagedClient client) throws IOException {
         this.client = client;
     }
 
     @Override
-    public Client getClient() {
+    public ManagedClient getClient() {
         return client;
     }
 
     @Override
     public void sendRequest(Object request) throws IOException {
-        try {
-            client.send(request);
-        } catch (TransportException e) {
-            e.printStackTrace();
-        }
+        client.send(request);
     }
 
     @Override

@@ -1,12 +1,13 @@
 package cn.cloudwalk.smartframework.clientcomponents;
 
+import cn.cloudwalk.smartframework.clientcomponents.core.ClientConnectionOperator;
+import cn.cloudwalk.smartframework.clientcomponents.core.ManagedClient;
+import cn.cloudwalk.smartframework.clientcomponents.core.ManagedClientConnection;
+import cn.cloudwalk.smartframework.clientcomponents.core.config.RequestConfig;
 import cn.cloudwalk.smartframework.clientcomponents.netty.FixedThreadPool;
 import cn.cloudwalk.smartframework.clientcomponents.netty.NettyTransport;
 import cn.cloudwalk.smartframework.clientcomponents.tcp.NettyProtocol;
 import cn.cloudwalk.smartframework.clientcomponents.tcp.message.NettyMessage;
-import cn.cloudwalk.smartframework.clientcomponents.core.ClientConnectionOperator;
-import cn.cloudwalk.smartframework.clientcomponents.core.ManagedClientConnection;
-import cn.cloudwalk.smartframework.clientcomponents.core.config.RequestConfig;
 import cn.cloudwalk.smartframework.transport.Channel;
 import cn.cloudwalk.smartframework.transport.Client;
 import cn.cloudwalk.smartframework.transport.exchange.ExchangeHandler;
@@ -31,7 +32,8 @@ public class DefaultTcpClientConnectionOperator implements ClientConnectionOpera
         NettyProtocol protocol = new NettyProtocol(transportContext, requestHandler);
         protocol.bind();
         Client client = protocol.getClient();
-        conn.bind(client);
+        ManagedClient client0 = new ManageClientImpl(client);
+        conn.bind(client0);
     }
 
 
@@ -60,7 +62,7 @@ public class DefaultTcpClientConnectionOperator implements ClientConnectionOpera
         @Override
         public void received(Channel channel, Object message) throws TransportException {
             NettyMessage nettyMessage = (NettyMessage) message;
-//            System.out.println(nettyMessage);
+            System.out.println(nettyMessage);
         }
 
         @Override

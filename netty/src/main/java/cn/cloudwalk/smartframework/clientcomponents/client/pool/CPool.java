@@ -3,6 +3,7 @@ package cn.cloudwalk.smartframework.clientcomponents.client.pool;
 import cn.cloudwalk.smartframework.clientcomponents.client.TcpRoute;
 import cn.cloudwalk.smartframework.clientcomponents.core.ConnectionFactory;
 import cn.cloudwalk.smartframework.clientcomponents.core.ManagedClientConnection;
+import cn.cloudwalk.smartframework.clientcomponents.core.pool.AbstractConnPool;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;

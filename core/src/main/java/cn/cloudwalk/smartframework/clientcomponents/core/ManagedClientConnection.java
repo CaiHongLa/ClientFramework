@@ -1,7 +1,5 @@
 package cn.cloudwalk.smartframework.clientcomponents.core;
 
-import cn.cloudwalk.smartframework.transport.Client;
-
 import java.io.IOException;
 
 /**
@@ -20,8 +18,8 @@ public interface ManagedClientConnection extends ClientConnection {
      * @param client
      * @throws IOException
      */
-    void bind(Client client) throws IOException;
+    void bind(ManagedClient client) throws IOException;
 
-    Client getClient();
+    ManagedClient getClient();
 
 }

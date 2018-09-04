@@ -24,9 +24,6 @@
             <artifactId>smart-transport</artifactId>
             <version>${smartframework.version}</version>
         </dependency>
-    </dependencies>
-
-    <dependencies>
         <dependency>
             <groupId>cn.cloudwalk.smartframework.clientcomponents</groupId>
             <artifactId>core</artifactId>

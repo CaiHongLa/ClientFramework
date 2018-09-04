@@ -10,15 +10,15 @@ import java.net.InetSocketAddress;
 public class TestMain {
 
     public static void main(String[] args) throws IOException {
-        InetSocketAddress host = new InetSocketAddress("10.10.1.40", 8004);
+        InetSocketAddress host = new InetSocketAddress("aiot.cloudwalk.cn", 8004);
         CloseableClient closeableClient = ClientBuilder.create().build();
         TcpRoute route = new TcpRoute(host, host);
         SendThread thread = new SendThread(closeableClient, route);
         NettyMessage response = new NettyMessage();
         NettyMessage.NettyMessageHeader header = new NettyMessage.NettyMessageHeader();
-        header.setSign((byte) 10);
+        header.setSign((byte) 1);
         header.setType((byte) 1);
-        response.setProtocolBody("{}");
+        response.setProtocolBody("{\"deviceNo\":\"13123345\"}");
         response.setProtocolHeader(header);
         for(int i =0 ; i< 100; i++) {
 //            closeableClient.execute(route, response);

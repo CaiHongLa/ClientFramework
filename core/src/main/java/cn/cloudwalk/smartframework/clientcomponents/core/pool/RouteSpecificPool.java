@@ -1,4 +1,4 @@
-package cn.cloudwalk.smartframework.clientcomponents.client.pool;
+package cn.cloudwalk.smartframework.clientcomponents.core.pool;
 
 import cn.cloudwalk.smartframework.clientcomponents.core.entry.PoolEntry;
 import cn.cloudwalk.smartframework.clientcomponents.core.util.Args;
