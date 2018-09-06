@@ -23,17 +23,14 @@ public class InternalClient extends CloseableClient {
 
 
     private final ClientConnectionManager connManager;
-    private final RequestConfig defaultConfig;
     private final List<Closeable> closeables;
 
 
     public InternalClient(
             final ClientConnectionManager connManager,
-            final RequestConfig defaultConfig,
             final List<Closeable> closeables) {
         Args.notNull(connManager, "HTTP connection manager");
         this.connManager = connManager;
-        this.defaultConfig = defaultConfig;
         this.closeables = closeables;
     }
 
@@ -56,9 +53,7 @@ public class InternalClient extends CloseableClient {
         Args.notNull(request, " request");
 
         final ConnectionRequest connRequest = connManager.requestConnection(route);
-
         final RequestConfig config = RequestConfig.DEFAULT;
-
         final ClientConnection managedConn;
         try {
             final int timeout = config.getConnectionRequestTimeout();
@@ -74,27 +69,22 @@ public class InternalClient extends CloseableClient {
             throw new RequestAbortedException("Request execution failed", cause);
         }
 
-        if (config.isStaleConnectionCheckEnabled()) {
-            // validate connection
-            if (managedConn.isOpen()) {
-                if (managedConn.isStale()) {
-                    managedConn.close();
-                }
+        if (managedConn.isOpen()) {
+            if (managedConn.isStale()) {
+                managedConn.close();
             }
         }
 
         final ConnectionHolder connHolder = new ConnectionHolder(this.connManager, managedConn);
         try {
-
             if (!managedConn.isOpen()) {
-                establishRoute(managedConn, route);
+                this.connManager.connect(managedConn, route);
             }
-
-            managedConn.sendRequest(request);
-            connHolder.setValidFor(3000, TimeUnit.MILLISECONDS);
+            Object result = managedConn.sendRequest(request);
+            connHolder.setValidFor(60000, TimeUnit.MILLISECONDS);
             connHolder.markReusable();
             connHolder.releaseConnection();
-            return null;
+            return result;
         } catch (final ConnectionShutdownException ex) {
             final InterruptedIOException ioex = new InterruptedIOException(
                     "Connection has been shut down");
@@ -106,14 +96,4 @@ public class InternalClient extends CloseableClient {
         }
     }
 
-
-    private void establishRoute(
-            final ClientConnection managedConn,
-            final Route route) throws IOException {
-        final int timeout = defaultConfig.getConnectTimeout();
-        this.connManager.connect(
-                managedConn,
-                route,
-                timeout > 0 ? timeout : 0);
-    }
 }

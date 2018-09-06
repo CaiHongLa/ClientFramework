@@ -10,27 +10,28 @@ import java.net.InetSocketAddress;
 public class TestMain {
 
     public static void main(String[] args) throws IOException {
-        InetSocketAddress host = new InetSocketAddress("aiot.cloudwalk.cn", 8004);
+        InetSocketAddress host = new InetSocketAddress("10.10.1.191", 8004);
         CloseableClient closeableClient = ClientBuilder.create().build();
         TcpRoute route = new TcpRoute(host, host);
         SendThread thread = new SendThread(closeableClient, route);
         NettyMessage response = new NettyMessage();
         NettyMessage.NettyMessageHeader header = new NettyMessage.NettyMessageHeader();
-        header.setSign((byte) 1);
+        header.setSign((byte) 3);
         header.setType((byte) 1);
         response.setProtocolBody("{\"deviceNo\":\"13123345\"}");
         response.setProtocolHeader(header);
         for(int i =0 ; i< 100; i++) {
-//            closeableClient.execute(route, response);
-            new Thread(thread).start();
+        closeableClient.execute(route, response);
+//            new Thread(thread).start();
 
         }
     }
 
-    static class SendThread implements Runnable{
+    static class SendThread implements Runnable {
 
         private final CloseableClient closeableClient;
         private final TcpRoute route;
+
         public SendThread(CloseableClient closeableClient, TcpRoute route) {
             this.closeableClient = closeableClient;
             this.route = route;

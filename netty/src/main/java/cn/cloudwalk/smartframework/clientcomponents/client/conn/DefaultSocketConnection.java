@@ -31,8 +31,8 @@ public class DefaultSocketConnection implements ManagedClientConnection {
     }
 
     @Override
-    public void sendRequest(Object request) throws IOException {
-        client.send(request);
+    public Object sendRequest(Object request) throws IOException {
+        return client.send(request);
     }
 
     @Override
@@ -57,14 +57,14 @@ public class DefaultSocketConnection implements ManagedClientConnection {
 
     @Override
     public void close() throws IOException {
-        if(client != null) {
+        if (client != null) {
             client.close();
         }
     }
 
     @Override
     public boolean isOpen() {
-        if(client == null){
+        if (client == null) {
             return false;
         }
         return client.isConnected();

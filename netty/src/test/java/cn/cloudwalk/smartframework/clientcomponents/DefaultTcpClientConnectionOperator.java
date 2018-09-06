@@ -68,7 +68,6 @@ public class DefaultTcpClientConnectionOperator implements ClientConnectionOpera
         @Override
         public void caught(Channel channel, Throwable throwable) {
             if (throwable instanceof TransportException) {
-                channel.close();
             }
         }
     };

@@ -23,6 +23,7 @@
             <groupId>cn.cloudwalk.smartframework</groupId>
             <artifactId>smart-transport</artifactId>
             <version>${smartframework.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>cn.cloudwalk.smartframework.clientcomponents</groupId>

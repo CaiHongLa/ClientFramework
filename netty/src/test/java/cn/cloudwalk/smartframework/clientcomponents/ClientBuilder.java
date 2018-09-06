@@ -109,7 +109,7 @@ public class ClientBuilder {
             @SuppressWarnings("resource") final PoolingTcpClientConnectionManager poolingmgr = new PoolingTcpClientConnectionManager(
                     new AtomicBoolean(false),
                     new DefaultTcpClientConnectionOperator(),
-                    new CPool(new PoolingTcpClientConnectionManager.InternalConnectionFactory(null), 10, 2, 60000, TimeUnit.MILLISECONDS),
+                    new CPool(new PoolingTcpClientConnectionManager.InternalConnectionFactory(), 10, 2, 60000, TimeUnit.MILLISECONDS),
                     new PoolingTcpClientConnectionManager.ConfigData());
             if (defaultRequestConfig != null) {
                 poolingmgr.setDefaultRequestConfig(defaultRequestConfig);
@@ -149,7 +149,6 @@ public class ClientBuilder {
         connectionEvictor.start();
         return new InternalClient(
                 connManagerCopy,
-                defaultRequestConfig != null ? defaultRequestConfig : RequestConfig.DEFAULT,
                 closeables);
     }
 }

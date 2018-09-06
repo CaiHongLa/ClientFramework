@@ -98,8 +98,8 @@ public class CPoolProxy implements ManagedClientConnection {
     }
 
     @Override
-    public void sendRequest(Object request) throws IOException {
-        getValidConnection().sendRequest(request);
+    public Object sendRequest(Object request) throws IOException {
+        return getValidConnection().sendRequest(request);
     }
 
     @Override

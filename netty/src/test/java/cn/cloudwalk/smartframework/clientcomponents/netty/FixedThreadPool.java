@@ -15,8 +15,4 @@ public class FixedThreadPool implements ThreadPool {
         return Executors.newFixedThreadPool(20);
     }
 
-    @Override
-    public Executor getExecutor() {
-        return executor;
-    }
 }

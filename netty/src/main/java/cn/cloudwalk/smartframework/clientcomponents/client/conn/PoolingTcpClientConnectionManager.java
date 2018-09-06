@@ -1,10 +1,9 @@
 package cn.cloudwalk.smartframework.clientcomponents.client.conn;
 
-import cn.cloudwalk.smartframework.clientcomponents.core.ManagedClientConnection;
+import cn.cloudwalk.smartframework.clientcomponents.client.TcpRoute;
 import cn.cloudwalk.smartframework.clientcomponents.client.pool.CPool;
 import cn.cloudwalk.smartframework.clientcomponents.client.pool.CPoolEntry;
 import cn.cloudwalk.smartframework.clientcomponents.client.pool.CPoolProxy;
-import cn.cloudwalk.smartframework.clientcomponents.client.TcpRoute;
 import cn.cloudwalk.smartframework.clientcomponents.core.*;
 import cn.cloudwalk.smartframework.clientcomponents.core.config.RequestConfig;
 import cn.cloudwalk.smartframework.clientcomponents.core.exception.ConnectionPoolTimeoutException;
@@ -138,7 +137,7 @@ public class PoolingTcpClientConnectionManager implements ClientConnectionManage
     }
 
     @Override
-    public void connect(ClientConnection managedConn, Route route, int connectTimeout) throws IOException {
+    public void connect(ClientConnection managedConn, Route route) throws IOException {
         Args.notNull(managedConn, "Managed Connection");
         Args.notNull(route, "HTTP route");
         final ManagedClientConnection conn;
@@ -147,7 +146,6 @@ public class PoolingTcpClientConnectionManager implements ClientConnectionManage
             conn = entry.getConnection();
         }
         final InetSocketAddress host = route.getTargetAddress();
-        final InetSocketAddress localAddress = route.getLocalAddress();
         RequestConfig socketConfig = this.configData.getRequestConfig(host);
         if (socketConfig == null) {
             socketConfig = this.configData.getDefaultRequestConfig();
@@ -199,7 +197,6 @@ public class PoolingTcpClientConnectionManager implements ClientConnectionManage
     }
 
 
-
     public static class ConfigData {
 
         private final Map<InetSocketAddress, RequestConfig> requestConfigMap;
@@ -230,13 +227,8 @@ public class PoolingTcpClientConnectionManager implements ClientConnectionManage
 
     public static class InternalConnectionFactory implements ConnectionFactory<TcpRoute, ManagedClientConnection> {
         private static final AtomicLong COUNTER = new AtomicLong();
-
-        private final ConfigData configData;
-
-        public InternalConnectionFactory(
-                final ConfigData configData) {
+        public InternalConnectionFactory() {
             super();
-            this.configData = configData != null ? configData : new ConfigData();
         }
 
         @Override

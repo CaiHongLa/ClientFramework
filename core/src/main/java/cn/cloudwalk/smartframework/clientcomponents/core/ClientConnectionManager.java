@@ -32,10 +32,9 @@ public interface ClientConnectionManager {
      *
      * @param conn
      * @param route
-     * @param connectTimeout
      * @throws IOException
      */
-    void connect(ClientConnection conn, Route route, int connectTimeout) throws IOException;
+    void connect(ClientConnection conn, Route route) throws IOException;
 
     /**
      * 关闭超时的连接

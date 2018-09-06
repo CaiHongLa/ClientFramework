@@ -1,57 +1,51 @@
 package cn.cloudwalk.smartframework.clientcomponents.core.config;
 
-import java.net.InetAddress;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RequestConfig implements Cloneable {
 
     public static final RequestConfig DEFAULT = new Builder().build();
 
-    private final InetAddress localAddress;
-    private final boolean staleConnectionCheckEnabled;
     private final int connectionRequestTimeout;
-    private final int connectTimeout;
-    private final int socketTimeout;
+    private final int maxTotal;
+    private final int maxPerRoute;
+    private final int maxTimeToLive;
+    private final Map<String, String> params;
 
     protected RequestConfig() {
-        this(null, false, 0, 0, 0);
+        this(0, 5000, 5000, 60000, new HashMap<>());
     }
 
     RequestConfig(
-            final InetAddress localAddress,
-            final boolean staleConnectionCheckEnabled,
-            final int connectionRequestTimeout,
-            final int connectTimeout,
-            final int socketTimeout) {
+            final int connectionRequestTimeout, int maxPerRoute, int maxTotal, int maxTimeToLive, Map<String, String> params) {
         super();
-        this.localAddress = localAddress;
-        this.staleConnectionCheckEnabled = staleConnectionCheckEnabled;
         this.connectionRequestTimeout = connectionRequestTimeout;
-        this.connectTimeout = connectTimeout;
-        this.socketTimeout = socketTimeout;
+        this.params = params;
+        this.maxPerRoute = maxPerRoute;
+        this.maxTotal = maxTotal;
+        this.maxTimeToLive = maxTimeToLive;
     }
-
-
-    public InetAddress getLocalAddress() {
-        return localAddress;
-    }
-
-    public boolean isStaleConnectionCheckEnabled() {
-        return staleConnectionCheckEnabled;
-    }
-
 
     public int getConnectionRequestTimeout() {
         return connectionRequestTimeout;
     }
 
-    public int getConnectTimeout() {
-        return connectTimeout;
+    public Map<String, String> getParams() {
+        return params;
     }
 
-    public int getSocketTimeout() {
-        return socketTimeout;
+    public int getMaxTotal() {
+        return maxTotal;
     }
 
+    public int getMaxPerRoute() {
+        return maxPerRoute;
+    }
+
+    public int getMaxTimeToLive() {
+        return maxTimeToLive;
+    }
 
     @Override
     protected RequestConfig clone() throws CloneNotSupportedException {
@@ -62,10 +56,8 @@ public class RequestConfig implements Cloneable {
     public String toString() {
         final StringBuilder builder = new StringBuilder();
         builder.append("[");
-        builder.append(", localAddress=").append(localAddress);
         builder.append(", connectionRequestTimeout=").append(connectionRequestTimeout);
-        builder.append(", connectTimeout=").append(connectTimeout);
-        builder.append(", socketTimeout=").append(socketTimeout);
+        builder.append(", params=").append(params);
         builder.append("]");
         return builder.toString();
     }
@@ -77,62 +69,56 @@ public class RequestConfig implements Cloneable {
     @SuppressWarnings("deprecation")
     public static RequestConfig.Builder copy(final RequestConfig config) {
         return new Builder()
-                .setLocalAddress(config.getLocalAddress())
-                .setStaleConnectionCheckEnabled(config.isStaleConnectionCheckEnabled())
-                .setConnectionRequestTimeout(config.getConnectionRequestTimeout())
-                .setConnectTimeout(config.getConnectTimeout())
-                .setSocketTimeout(config.getSocketTimeout());
+                .setConnectionRequestTimeout(config.getConnectionRequestTimeout());
     }
 
     public static class Builder {
 
-        private InetAddress localAddress;
-        private boolean staleConnectionCheckEnabled;
         private int connectionRequestTimeout;
-        private int connectTimeout;
-        private int socketTimeout;
+        private int maxTotal;
+        private int maxPerRoute;
+        private int maxTimeToLive;
+        private Map<String, String> params;
 
         Builder() {
             super();
-            this.staleConnectionCheckEnabled = false;
             this.connectionRequestTimeout = -1;
-            this.connectTimeout = -1;
-            this.socketTimeout = -1;
+            this.params = new HashMap<>();
         }
 
-
-        public Builder setLocalAddress(final InetAddress localAddress) {
-            this.localAddress = localAddress;
-            return this;
-        }
-
-        public Builder setStaleConnectionCheckEnabled(final boolean staleConnectionCheckEnabled) {
-            this.staleConnectionCheckEnabled = staleConnectionCheckEnabled;
-            return this;
-        }
 
         public Builder setConnectionRequestTimeout(final int connectionRequestTimeout) {
             this.connectionRequestTimeout = connectionRequestTimeout;
             return this;
         }
 
-        public Builder setConnectTimeout(final int connectTimeout) {
-            this.connectTimeout = connectTimeout;
+        public Builder setMaxTotal(final int maxTotal){
+            this.maxTotal = maxTotal;
             return this;
         }
 
-        public Builder setSocketTimeout(final int socketTimeout) {
-            this.socketTimeout = socketTimeout;
+        public Builder setMaxPerRoute(final int maxPerRoute){
+            this.maxPerRoute = maxPerRoute;
+            return this;
+        }
+
+        public Builder setMaxTimeToLive(final int maxTimeToLive){
+            this.maxTimeToLive = maxTimeToLive;
+            return this;
+        }
+
+        public Builder setParams(Map<String, String> params){
+            this.params = params;
+            return this;
+        }
+
+        public Builder addParams(String key, String value){
+            this.params.put(key, value);
             return this;
         }
 
         public RequestConfig build() {
-            return new RequestConfig(
-                    localAddress,
-                    staleConnectionCheckEnabled,
-                    connectionRequestTimeout,
-                    connectTimeout,
-                    socketTimeout);
+            return new RequestConfig(connectionRequestTimeout, maxPerRoute, maxTotal, maxTimeToLive, params);
         }
 
     }

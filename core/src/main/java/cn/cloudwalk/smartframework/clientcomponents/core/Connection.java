@@ -6,8 +6,8 @@ import java.io.IOException;
 /**
  * 连接 （代表一个可以进行数据传输的通道）
  *
- * @since 1.0.0
  * @see java.io.Closeable  可关闭的
+ * @since 1.0.0
  */
 public interface Connection extends NetConnection, Closeable {
 

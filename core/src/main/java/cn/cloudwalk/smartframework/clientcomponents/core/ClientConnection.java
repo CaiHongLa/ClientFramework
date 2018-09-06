@@ -15,6 +15,6 @@ public interface ClientConnection extends Connection {
      * @param request 请求
      * @throws IOException
      */
-    void sendRequest(Object request) throws IOException;
+    Object sendRequest(Object request) throws IOException;
 
 }

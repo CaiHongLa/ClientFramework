@@ -25,8 +25,8 @@ public class NettyTransport implements Transport {
     @Override
     public Client connect(TransportContext transportContext, ChannelHandler handler) {
         transportContext = transportContext
-                .addParameter(ProtocolConstants.CLIENT_CONNECT_TIME, transportContext.getParameter(ProtocolConstants.NETTY_CLIENT_CONNECT_TIME))
-                .addParameter(ProtocolConstants.CLIENT_CONNECT_TIMEOUT, transportContext.getParameter(ProtocolConstants.NETTY_CLIENT_CONNECT_TIMEOUT));
+                .addParameter(ProtocolConstants.CLIENT_CONNECT_TIME, transportContext.getParameter(ProtocolConstants.RPC_CLIENT_CONNECT_TIME))
+                .addParameter(ProtocolConstants.CLIENT_CONNECT_TIMEOUT, transportContext.getParameter(ProtocolConstants.RPC_CLIENT_CONNECT_TIMEOUT));
         return new NettyClient(transportContext, handler);
     }
 }

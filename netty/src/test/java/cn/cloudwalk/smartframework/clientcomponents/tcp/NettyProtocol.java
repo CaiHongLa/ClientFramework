@@ -15,6 +15,7 @@ import org.apache.commons.codec.binary.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -54,7 +55,7 @@ public class NettyProtocol extends AbstractProtocol {
         }
     }
 
-    public Client getClient(){
+    public Client getClient() {
         return client;
     }
 

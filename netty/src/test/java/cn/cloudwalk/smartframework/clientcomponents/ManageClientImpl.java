@@ -20,13 +20,14 @@ public class ManageClientImpl implements ManagedClient {
     }
 
     @Override
-    public void send(Object request) throws IOException {
+    public Object send(Object request) throws IOException {
         Args.notNull(client, "client");
         try {
             client.send(request, true);
         } catch (TransportException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     @Override

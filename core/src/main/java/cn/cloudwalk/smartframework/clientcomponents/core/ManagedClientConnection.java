@@ -3,7 +3,6 @@ package cn.cloudwalk.smartframework.clientcomponents.core;
 import java.io.IOException;
 
 /**
- *
  * 可被连接池管理的连接
  *
  * @since 1.0.0

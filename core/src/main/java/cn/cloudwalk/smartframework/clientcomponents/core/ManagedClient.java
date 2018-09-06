@@ -8,7 +8,7 @@ import java.io.IOException;
  */
 public interface ManagedClient extends NetConnection, Closeable {
 
-    void send(Object request) throws IOException;
+    Object send(Object request) throws IOException;
 
     boolean isClosed();
 
