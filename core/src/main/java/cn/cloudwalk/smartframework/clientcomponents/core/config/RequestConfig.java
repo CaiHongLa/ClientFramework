@@ -58,6 +58,9 @@ public class RequestConfig implements Cloneable {
         builder.append("[");
         builder.append(", connectionRequestTimeout=").append(connectionRequestTimeout);
         builder.append(", params=").append(params);
+        builder.append(", maxTotal=").append(maxTotal);
+        builder.append(", maxPerRoute=").append(maxPerRoute);
+        builder.append(", maxTimeToLive=").append(maxTimeToLive);
         builder.append("]");
         return builder.toString();
     }
@@ -69,7 +72,11 @@ public class RequestConfig implements Cloneable {
     @SuppressWarnings("deprecation")
     public static RequestConfig.Builder copy(final RequestConfig config) {
         return new Builder()
-                .setConnectionRequestTimeout(config.getConnectionRequestTimeout());
+                .setConnectionRequestTimeout(config.getConnectionRequestTimeout())
+                .setParams(config.getParams())
+                .setMaxTotal(config.getMaxTotal())
+                .setMaxTimeToLive(config.getMaxTimeToLive())
+                .setMaxPerRoute(config.getMaxPerRoute());
     }
 
     public static class Builder {

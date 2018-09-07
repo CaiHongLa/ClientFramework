@@ -11,7 +11,6 @@ import cn.cloudwalk.smartframework.clientcomponents.core.util.Args;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.*;
@@ -145,15 +144,14 @@ public class PoolingTcpClientConnectionManager implements ClientConnectionManage
             final CPoolEntry entry = CPoolProxy.getPoolEntry(managedConn);
             conn = entry.getConnection();
         }
-        final InetSocketAddress host = route.getTargetAddress();
-        RequestConfig socketConfig = this.configData.getRequestConfig(host);
+        RequestConfig socketConfig = this.configData.getRequestConfig(route);
         if (socketConfig == null) {
             socketConfig = this.configData.getDefaultRequestConfig();
         }
         if (socketConfig == null) {
             socketConfig = RequestConfig.DEFAULT;
         }
-        this.connectionOperator.connect(conn, host, socketConfig);
+        this.connectionOperator.connect(conn, route, socketConfig);
     }
 
     @Override
@@ -188,18 +186,18 @@ public class PoolingTcpClientConnectionManager implements ClientConnectionManage
         this.configData.setDefaultRequestConfig(defaultRequestConfig);
     }
 
-    public RequestConfig getRequestConfig(final InetSocketAddress host) {
-        return this.configData.getRequestConfig(host);
+    public RequestConfig getRequestConfig(final TcpRoute route) {
+        return this.configData.getRequestConfig(route);
     }
 
-    public void setRequestConfig(final InetSocketAddress host, final RequestConfig socketConfig) {
-        this.configData.setRequestConfig(host, socketConfig);
+    public void setRequestConfig(final TcpRoute route, final RequestConfig socketConfig) {
+        this.configData.setRequestConfig(route, socketConfig);
     }
 
 
     public static class ConfigData {
 
-        private final Map<InetSocketAddress, RequestConfig> requestConfigMap;
+        private final Map<Route, RequestConfig> requestConfigMap;
         private volatile RequestConfig defaultRequestConfig;
 
         public ConfigData() {
@@ -215,12 +213,12 @@ public class PoolingTcpClientConnectionManager implements ClientConnectionManage
             this.defaultRequestConfig = defaultRequestConfig;
         }
 
-        public RequestConfig getRequestConfig(final InetSocketAddress host) {
-            return this.requestConfigMap.get(host);
+        public RequestConfig getRequestConfig(final Route route) {
+            return this.requestConfigMap.get(route);
         }
 
-        public void setRequestConfig(final InetSocketAddress host, final RequestConfig socketConfig) {
-            this.requestConfigMap.put(host, socketConfig);
+        public void setRequestConfig(final Route route, final RequestConfig socketConfig) {
+            this.requestConfigMap.put(route, socketConfig);
         }
 
     }

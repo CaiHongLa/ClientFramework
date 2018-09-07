@@ -1,7 +1,5 @@
 package cn.cloudwalk.smartframework.clientcomponents.core;
 
-import java.net.InetSocketAddress;
-
 /**
  * 路由
  *
@@ -10,16 +8,17 @@ import java.net.InetSocketAddress;
 public interface Route {
 
     /**
-     * 远程地址
+     * 远程IP
      *
      * @return
      */
-    InetSocketAddress getTargetAddress();
+    String getHostIp();
 
     /**
-     * 本机地址
+     * 远程端口
      *
      * @return
      */
-    InetSocketAddress getLocalAddress();
+    int getHostPort();
+
 }

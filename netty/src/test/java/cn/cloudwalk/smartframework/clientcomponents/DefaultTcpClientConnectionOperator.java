@@ -3,11 +3,11 @@ package cn.cloudwalk.smartframework.clientcomponents;
 import cn.cloudwalk.smartframework.clientcomponents.core.ClientConnectionOperator;
 import cn.cloudwalk.smartframework.clientcomponents.core.ManagedClient;
 import cn.cloudwalk.smartframework.clientcomponents.core.ManagedClientConnection;
+import cn.cloudwalk.smartframework.clientcomponents.core.Route;
 import cn.cloudwalk.smartframework.clientcomponents.core.config.RequestConfig;
 import cn.cloudwalk.smartframework.clientcomponents.netty.FixedThreadPool;
 import cn.cloudwalk.smartframework.clientcomponents.netty.NettyTransport;
 import cn.cloudwalk.smartframework.clientcomponents.tcp.NettyProtocol;
-import cn.cloudwalk.smartframework.clientcomponents.tcp.message.NettyMessage;
 import cn.cloudwalk.smartframework.transport.Channel;
 import cn.cloudwalk.smartframework.transport.Client;
 import cn.cloudwalk.smartframework.transport.exchange.ExchangeHandler;
@@ -15,9 +15,10 @@ import cn.cloudwalk.smartframework.transport.exchange.support.ExchangeHandlerAda
 import cn.cloudwalk.smartframework.transport.support.dispatcher.MessageDispatcher;
 import cn.cloudwalk.smartframework.transport.support.transport.TransportContext;
 import cn.cloudwalk.smartframework.transport.support.transport.TransportException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,10 +26,10 @@ public class DefaultTcpClientConnectionOperator implements ClientConnectionOpera
 
 
     @Override
-    public void connect(ManagedClientConnection conn, InetSocketAddress host, RequestConfig requestConfig) throws IOException {
+    public void connect(ManagedClientConnection conn, Route route, RequestConfig requestConfig) throws IOException {
 
         Map<String, String> parameters = new HashMap<>(50);
-        TransportContext transportContext = new TransportContext(host.getHostName(), host.getPort(), parameters, new NettyProtocol.NettyCodec(), new NettyTransport(), new FixedThreadPool(), new MessageDispatcher());
+        TransportContext transportContext = new TransportContext(route.getHostIp(), route.getHostPort(), parameters, new NettyProtocol.NettyCodec(), new NettyTransport(), new FixedThreadPool(), new MessageDispatcher());
         NettyProtocol protocol = new NettyProtocol(transportContext, requestHandler);
         protocol.bind();
         Client client = protocol.getClient();
@@ -41,28 +42,23 @@ public class DefaultTcpClientConnectionOperator implements ClientConnectionOpera
      * 消息处理
      */
     private final ExchangeHandler requestHandler = new ExchangeHandlerAdapter() {
+        private Logger logger = LogManager.getLogger();
 
         @Override
         public void connected(Channel channel) {
-            System.out.println("connect");
         }
 
         @Override
         public void disconnected(Channel channel) {
-            System.out.println("disconnect");
         }
 
         @Override
         public void send(Channel channel, Object message) {
-            System.out.println("send");
-
 
         }
 
         @Override
         public void received(Channel channel, Object message) throws TransportException {
-            NettyMessage nettyMessage = (NettyMessage) message;
-            System.out.println(nettyMessage);
         }
 
         @Override

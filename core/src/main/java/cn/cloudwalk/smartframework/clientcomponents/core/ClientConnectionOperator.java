@@ -3,7 +3,6 @@ package cn.cloudwalk.smartframework.clientcomponents.core;
 import cn.cloudwalk.smartframework.clientcomponents.core.config.RequestConfig;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 
 /**
  * 客户端连接操作器
@@ -20,5 +19,5 @@ public interface ClientConnectionOperator {
      * @param requestConfig 配置
      * @throws IOException
      */
-    void connect(ManagedClientConnection conn, InetSocketAddress host, RequestConfig requestConfig) throws IOException;
+    void connect(ManagedClientConnection conn, Route host, RequestConfig requestConfig) throws IOException;
 }
