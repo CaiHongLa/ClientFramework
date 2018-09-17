@@ -1,11 +1,15 @@
 package cn.cloudwalk.smartframework.clientcomponents.netty;
 
-import cn.cloudwalk.smartframework.transport.AbstractChannel;
-import cn.cloudwalk.smartframework.transport.ChannelHandler;
-import cn.cloudwalk.smartframework.transport.support.transport.TransportContext;
-import cn.cloudwalk.smartframework.transport.support.transport.TransportException;
+import cn.cloudwalk.smartframework.clientcomponents.Count;
+import cn.cloudwalk.smartframework.transportcomponents.AbstractChannel;
+import cn.cloudwalk.smartframework.transportcomponents.ChannelHandler;
+import cn.cloudwalk.smartframework.transportcomponents.support.transport.TransportContext;
+import cn.cloudwalk.smartframework.transportcomponents.support.transport.TransportException;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -77,13 +81,19 @@ public class NettyChannel extends AbstractChannel {
     public void send(Object message, boolean sent) throws TransportException {
         super.send(message, sent);
 
-        boolean success = true;
-        int timeout = 0;
+        final int timeout = 10 * 1000;
+        ChannelFuture future;
         try {
-            ChannelFuture future = channel.writeAndFlush(message);
+            future = channel.writeAndFlush(message);
             if (sent) {
-                timeout = 10 * 1000;
-                success = future.await(timeout);
+                future.addListener((ChannelFutureListener) future1 -> {
+                    boolean success = future1.await(timeout);
+                    if (!success) {
+                        logger.error("send error");
+                    } else {
+                        Count.count.countDown();
+                    }
+                });
             }
             Throwable cause = future.cause();
             if (cause != null) {
@@ -91,11 +101,6 @@ public class NettyChannel extends AbstractChannel {
             }
         } catch (Throwable e) {
             throw new TransportException(this, "send message：" + message + " to " + getRemoteAddress() + ", error: " + e.getMessage(), e);
-        }
-
-        if (!success) {
-            throw new TransportException(this, "send message：" + message + " to " + getRemoteAddress()
-                    + "，timeout：" + timeout + "ms");
         }
     }
 

@@ -15,6 +15,14 @@
 
     <name>clientcomponents</name>
 
+    <distributionManagement>
+        <repository>
+            <id>nexus-yckj</id>
+            <name>nexus-yckj</name>
+            <url>http://nexus.yc/nexus/content/repositories/releases/</url>
+        </repository>
+    </distributionManagement>
+
     <build>
         <plugins>
             <plugin>

@@ -1,13 +1,12 @@
 package cn.cloudwalk.smartframework.clientcomponents.netty;
 
-import cn.cloudwalk.smartframework.common.util.NettySslConfigUtil;
-import cn.cloudwalk.smartframework.transport.AbstractServer;
-import cn.cloudwalk.smartframework.transport.Channel;
-import cn.cloudwalk.smartframework.transport.ChannelHandler;
-import cn.cloudwalk.smartframework.transport.Server;
-import cn.cloudwalk.smartframework.transport.support.ChannelHandlers;
-import cn.cloudwalk.smartframework.transport.support.ProtocolConstants;
-import cn.cloudwalk.smartframework.transport.support.transport.TransportContext;
+import cn.cloudwalk.smartframework.transportcomponents.AbstractServer;
+import cn.cloudwalk.smartframework.transportcomponents.Channel;
+import cn.cloudwalk.smartframework.transportcomponents.ChannelHandler;
+import cn.cloudwalk.smartframework.transportcomponents.Server;
+import cn.cloudwalk.smartframework.transportcomponents.support.ChannelHandlers;
+import cn.cloudwalk.smartframework.transportcomponents.support.ProtocolConstants;
+import cn.cloudwalk.smartframework.transportcomponents.support.transport.TransportContext;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
@@ -16,6 +15,7 @@ import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -75,8 +75,8 @@ public class NettyServer extends AbstractServer implements Server {
                     protected void initChannel(io.netty.channel.Channel ch) throws Exception {
                         NettyCodecAdapter adapter = new NettyCodecAdapter(getTransportContext(), getCodec(), NettyServer.this);
                         ChannelPipeline pipeline = ch.pipeline();
-                        NettySslConfigUtil.addSslHandler(pipeline, "tcp");
-                        pipeline.addLast("decoder", adapter.getDecoder())
+                        pipeline.addLast("pre_decoder", new LengthFieldBasedFrameDecoder(4 * 1024 * 1024 , 14 , 4))
+                                .addLast("decoder", adapter.getDecoder())
                                 .addLast("encoder", adapter.getEncoder())
                                 .addLast("handler", nettyServerHandler);
                     }

@@ -109,7 +109,7 @@ public class ClientBuilder {
             @SuppressWarnings("resource") final PoolingTcpClientConnectionManager poolingmgr = new PoolingTcpClientConnectionManager(
                     new AtomicBoolean(false),
                     new DefaultTcpClientConnectionOperator(),
-                    new CPool(new PoolingTcpClientConnectionManager.InternalConnectionFactory(), 100, 100, 60000, TimeUnit.MILLISECONDS),
+                    new CPool(new PoolingTcpClientConnectionManager.InternalConnectionFactory(), 1000, 1000, 60000, TimeUnit.MILLISECONDS),
                     new PoolingTcpClientConnectionManager.ConfigData());
             if (defaultRequestConfig != null) {
                 poolingmgr.setDefaultRequestConfig(defaultRequestConfig);

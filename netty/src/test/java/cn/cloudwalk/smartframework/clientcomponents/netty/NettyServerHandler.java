@@ -1,8 +1,8 @@
 package cn.cloudwalk.smartframework.clientcomponents.netty;
 
-import cn.cloudwalk.smartframework.transport.Channel;
-import cn.cloudwalk.smartframework.transport.ChannelHandler;
-import cn.cloudwalk.smartframework.transport.support.transport.TransportContext;
+import cn.cloudwalk.smartframework.transportcomponents.Channel;
+import cn.cloudwalk.smartframework.transportcomponents.ChannelHandler;
+import cn.cloudwalk.smartframework.transportcomponents.support.transport.TransportContext;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;

@@ -1,8 +1,8 @@
 package cn.cloudwalk.smartframework.clientcomponents.netty;
 
-import cn.cloudwalk.smartframework.transport.AbstractClient;
-import cn.cloudwalk.smartframework.transport.ChannelHandler;
-import cn.cloudwalk.smartframework.transport.support.transport.TransportContext;
+import cn.cloudwalk.smartframework.transportcomponents.AbstractClient;
+import cn.cloudwalk.smartframework.transportcomponents.ChannelHandler;
+import cn.cloudwalk.smartframework.transportcomponents.support.transport.TransportContext;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
@@ -11,6 +11,7 @@ import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,28 +41,30 @@ public class NettyClient extends AbstractClient {
         final NettyClientHandler nettyClientHandler = new NettyClientHandler(getTransportContext(), this);
         bootstrap = new Bootstrap();
         if (Epoll.isAvailable()) {
-            bootstrap.group(new EpollEventLoopGroup(AVAILABLE_PROCESSORS, new DefaultThreadFactory("NettyEpollClientWorker", true)));
+            bootstrap.group(new EpollEventLoopGroup(1, new DefaultThreadFactory("NettyEpollClientWorker", true)));
             bootstrap.channel(EpollSocketChannel.class);
         } else {
-            bootstrap.group(new NioEventLoopGroup(AVAILABLE_PROCESSORS, new DefaultThreadFactory("NettyNioClientWorker", true)));
+            bootstrap.group(new NioEventLoopGroup(1, new DefaultThreadFactory("NettyNioClientWorker", true)));
             bootstrap.channel(NioSocketChannel.class);
         }
-        bootstrap.option(ChannelOption.SO_KEEPALIVE, true)
+        bootstrap/*.option(ChannelOption.SO_KEEPALIVE, true)*/
                 .option(ChannelOption.TCP_NODELAY, true)
+                .option(ChannelOption.SO_SNDBUF,  256 * 1024)
                 .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
-
-        if (getTimeout() < 3000) {
-            bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 3000);
-        } else {
-            bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, getTimeout());
-        }
+//
+//        if (getTimeout() < 3000) {
+            bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
+//        } else {
+//            bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, getTimeout());
+//        }
 
         bootstrap.handler(new ChannelInitializer<Channel>() {
             @Override
             protected void initChannel(Channel ch) throws Exception {
                 NettyCodecAdapter adapter = new NettyCodecAdapter(getTransportContext(), getCodec(), NettyClient.this);
                 ChannelPipeline pipeline = ch.pipeline();
-                pipeline.addLast("decoder", adapter.getDecoder())
+                pipeline.addLast("pre_decoder", new LengthFieldBasedFrameDecoder(4 * 1024 * 1024 , 14 , 4))
+                        .addLast("decoder", adapter.getDecoder())
                         .addLast("encoder", adapter.getEncoder())
                         .addLast("handler", nettyClientHandler);
             }
@@ -72,7 +75,7 @@ public class NettyClient extends AbstractClient {
     protected void doConnect() throws Throwable {
         ChannelFuture future = bootstrap.connect(getConnectAddress());
         try {
-            boolean ret = future.awaitUninterruptibly(getConnectTimeout(), TimeUnit.MILLISECONDS);
+            boolean ret = future.awaitUninterruptibly(10000, TimeUnit.MILLISECONDS);
 
             if (ret && future.isSuccess()) {
                 Channel newChannel = future.channel();
@@ -102,10 +105,15 @@ public class NettyClient extends AbstractClient {
                     }
                 }
             } else if (future.cause() != null) {
+                logger.error(future.cause());
                 throw future.cause();
             } else {
+                logger.error("************************************");
             }
         } finally {
+            if(!isConnected()){
+
+            }
         }
     }
 
@@ -127,7 +135,7 @@ public class NettyClient extends AbstractClient {
     }
 
     @Override
-    protected cn.cloudwalk.smartframework.transport.Channel getChannel() {
+    protected cn.cloudwalk.smartframework.transportcomponents.Channel getChannel() {
         Channel c = channel;
         if (c == null || !c.isActive()) {
             return null;

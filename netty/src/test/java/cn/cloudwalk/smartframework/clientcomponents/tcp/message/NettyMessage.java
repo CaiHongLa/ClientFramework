@@ -1,7 +1,5 @@
 package cn.cloudwalk.smartframework.clientcomponents.tcp.message;
 
-import cn.cloudwalk.smartframework.common.model.BaseDataModel;
-
 /**
  * 自有协议栈
  *
@@ -64,7 +62,7 @@ public class NettyMessage {
      * @author LIYANHUI
      * @since 1.0.0
      */
-    public static final class NettyMessageHeader extends BaseDataModel {
+    public static final class NettyMessageHeader {
 
         /**
          * 头部总长度16byte
@@ -117,12 +115,5 @@ public class NettyMessage {
             this.timeStamp = timeStamp;
         }
 
-        @Override
-        public String toString() {
-            return " {timeStamp=" + timeStamp +
-                    ", type=" + type +
-                    ", sign=" + sign +
-                    "} ";
-        }
     }
 }

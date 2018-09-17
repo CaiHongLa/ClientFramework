@@ -1,11 +1,11 @@
 package cn.cloudwalk.smartframework.clientcomponents.netty;
 
-import cn.cloudwalk.smartframework.transport.ChannelHandler;
-import cn.cloudwalk.smartframework.transport.Client;
-import cn.cloudwalk.smartframework.transport.Server;
-import cn.cloudwalk.smartframework.transport.Transport;
-import cn.cloudwalk.smartframework.transport.support.ProtocolConstants;
-import cn.cloudwalk.smartframework.transport.support.transport.TransportContext;
+import cn.cloudwalk.smartframework.transportcomponents.ChannelHandler;
+import cn.cloudwalk.smartframework.transportcomponents.Client;
+import cn.cloudwalk.smartframework.transportcomponents.Server;
+import cn.cloudwalk.smartframework.transportcomponents.Transport;
+import cn.cloudwalk.smartframework.transportcomponents.support.ProtocolConstants;
+import cn.cloudwalk.smartframework.transportcomponents.support.transport.TransportContext;
 
 /**
  * NettyTransport

@@ -2,8 +2,8 @@ package cn.cloudwalk.smartframework.clientcomponents;
 
 import cn.cloudwalk.smartframework.clientcomponents.core.ManagedClient;
 import cn.cloudwalk.smartframework.clientcomponents.core.util.Args;
-import cn.cloudwalk.smartframework.transport.Client;
-import cn.cloudwalk.smartframework.transport.support.transport.TransportException;
+import cn.cloudwalk.smartframework.transportcomponents.Client;
+import cn.cloudwalk.smartframework.transportcomponents.support.transport.TransportException;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
