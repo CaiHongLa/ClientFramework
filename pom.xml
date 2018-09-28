@@ -19,7 +19,7 @@
         <repository>
             <id>nexus-yckj</id>
             <name>nexus-yckj</name>
-            <url>http://nexus.yc/nexus/content/repositories/releases/</url>
+            <url>http://nexus.cloudwalk.work/nexus/content/repositories/releases/</url>
         </repository>
     </distributionManagement>
 
